@@ -1,4 +1,5 @@
 // src/pages/HomePage.jsx
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -8,7 +9,7 @@ const HomePage = () => {
   const [pokemonList, setPokemonList] = useState([]);
   const [search, setSearch] = useState("");
   const [sortOption, setSortOption] = useState("name"); // Sorting option
-  const [typeFilter, setTypeFilter] = useState(null); // Type filter
+  const [typeFilter, setTypeFilter] = useState(""); // Type filter, initially set to an empty string
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(12);
   const { favorites, addFavorite, removeFavorite } = useFavorites(); // Destructure favorites methods
@@ -24,8 +25,9 @@ const HomePage = () => {
       });
   }, []);
 
-  const filteredPokemon = pokemonList.filter((pokemon) =>
-    pokemon.name.toLowerCase().includes(search.toLowerCase())
+  const filteredPokemon = pokemonList.filter(
+    (pokemon) =>
+      pokemon.name && pokemon.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const sortedPokemon = () => {
@@ -41,8 +43,12 @@ const HomePage = () => {
 
   const filteredAndSortedPokemon = () => {
     let result = sortedPokemon();
-    if (typeFilter) {
-      result = result.filter((pokemon) => pokemon.types.includes(typeFilter));
+    if (typeFilter && result.length > 0) {
+      result = result.filter((pokemon) =>
+        pokemon.types
+          ? pokemon.types.some((type) => type.type.name === typeFilter)
+          : false
+      );
     }
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -64,32 +70,37 @@ const HomePage = () => {
         />
       </div>
 
-      <div className="mb-3">
-        <select
-          className="form-select w-auto d-inline-block"
-          onChange={(e) => setSortOption(e.target.value)}
-          value={sortOption}
-        >
-          <option value="name">Sort by Name</option>
-          <option value="stats">Sort by Base Stats</option>
-        </select>
-
-        <select
-          className="form-select w-auto d-inline-block"
-          onChange={(e) => setTypeFilter(e.target.value || null)}
-          value={typeFilter || ""}
-        >
-          <option value="">Filter by Type</option>
-          <option value="Fire">Fire</option>
-          <option value="Water">Water</option>
-          <option value="Grass">Grass</option>
-          <option value="Electric">Electric</option>
-          <option value="Psychic">Psychic</option>
-          <option value="Rock">Rock</option>
-          <option value="Bug">Bug</option>
-          <option value="Ghost">Ghost</option>
-          {/* Add more Pokémon types as needed */}
-        </select>
+      <div className="mb-3 d-flex gap-3">
+        <div className="mb-3 d-flex justify-content-between align-items-center">
+          <h5>Sort by: </h5>
+          <select
+            className="form-select w-auto d-inline-block"
+            onChange={(e) => setSortOption(e.target.value)}
+            value={sortOption}
+          >
+            <option value="name">Name</option>
+            <option value="stats">Base Stats</option>
+          </select>
+        </div>
+        <div className="mb-3 d-flex justify-content-between">
+          <h5>Filter by:</h5>
+          <select
+            className="form-select w-auto d-inline-block"
+            onChange={(e) => setTypeFilter(e.target.value)}
+            value={typeFilter}
+          >
+            <option value="">All</option>
+            <option value="Fire">Fire</option>
+            <option value="Water">Water</option>
+            <option value="Grass">Grass</option>
+            <option value="Electric">Electric</option>
+            <option value="Psychic">Psychic</option>
+            <option value="Rock">Rock</option>
+            <option value="Bug">Bug</option>
+            <option value="Ghost">Ghost</option>
+            {/* Add more Pokémon types as needed */}
+          </select>
+        </div>
       </div>
 
       <div className="row">
@@ -98,7 +109,7 @@ const HomePage = () => {
             <div className="card">
               <img
                 src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                  pokemon.url.split("/")[6]
+                  pokemon.url ? pokemon.url.split("/")[6] : ""
                 }.png`}
                 className="card-img-top rounded mx-auto d-block"
                 alt={pokemon.name}
