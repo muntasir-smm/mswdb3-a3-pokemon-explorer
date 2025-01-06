@@ -1,34 +1,67 @@
-// src/pages/HomePage.js
-
-import React, { useState, useEffect } from "react";
-import { fetchPokemonList } from "../utils/api";
-import PokemonCard from "../components/PokemonCard";
-import SearchBar from "../components/SearchBar";
+// src/pages/HomePage.jsx
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
   const [pokemonList, setPokemonList] = useState([]);
-  const [filteredPokemon, setFilteredPokemon] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetchPokemonList().then((data) => {
-      setPokemonList(data);
-      setFilteredPokemon(data);
-    });
+    axios
+      .get("https://pokeapi.co/api/v2/pokemon?limit=500")
+      .then((res) => {
+        setPokemonList(res.data.results);
+      })
+
+      .catch((error) => {
+        console.error("Error fetching Pokémon data:", error);
+      });
   }, []);
 
-  const handleSearch = (query) => {
-    const filtered = pokemonList.filter((pokemon) =>
-      pokemon.name.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredPokemon(filtered);
-  };
+  const filteredPokemon = pokemonList.filter((pokemon) =>
+    pokemon.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  console.log(pokemonList);
 
   return (
-    <div>
-      <SearchBar onSearch={handleSearch} />
-      <div>
+    <div className="container">
+      <h1 className="my-4 text-center">Pokémon</h1>
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search Pokémon..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+      <div className="row">
         {filteredPokemon.map((pokemon) => (
-          <PokemonCard key={pokemon.name} pokemon={pokemon} />
+          <div className="col-md-4 mb-4" key={pokemon.name}>
+            <div className="card">
+              <img
+                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                  pokemon.url.split("/")[6]
+                }.png`}
+                className="card-img-top rounded mx-auto d-block"
+                alt={pokemon.name}
+                onError={(e) =>
+                  (e.target.src = "https://via.placeholder.com/150")
+                } // Fallback image
+              />
+              <div className="card-body">
+                <h5 className="card-title">{pokemon.name}</h5>
+                <Link
+                  to={`/pokemon/${pokemon.name}`}
+                  className="btn btn-primary"
+                >
+                  View Details
+                </Link>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     </div>
