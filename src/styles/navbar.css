@@ -1,14 +1,21 @@
-.navbar-nav .nav-item .nav-link.active {
-  background-color: #cc00ff; /* Blue background for active link */
-  color: white !important; /* Ensure the text stays white */
-  border-radius: 0.25rem; /* Rounded corners for a more modern look */
+.brand-name {
+  color: #ff0055 !important;
+  font-size: 1.5rem !important;
+  font-weight: 900;
+  padding: 5px;
 }
 
 .navbar-nav .nav-item .nav-link {
   transition: background-color 0.3s ease;
+  color: #ffffff;
+  font-size: 1.2rem;
+}
+.navbar-nav .nav-item .nav-link.active {
+  color: #ff5500 !important;
+  font-size: 1.2rem;
+  font-weight: 900;
 }
 
 .navbar-nav .nav-item .nav-link:hover {
-  background-color: #00eeff; /* Subtle hover effect */
-  color: white; /* Make sure the text stays white when hovered */
+  color: #ff0055;
 }

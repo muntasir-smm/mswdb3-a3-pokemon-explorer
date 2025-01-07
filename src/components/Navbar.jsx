@@ -30,18 +30,23 @@ const Navbar = () => {
 
   return (
     <nav
-      className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
+      className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top"
       ref={navbarRef}
     >
       <div className="container-fluid">
-        <img
-          src={logo}
-          alt="PokéRealm Logo"
-          width="30"
-          height="30"
-          className="d-inline-block align-top me-2"
-        />
-        <a className="navbar-brand" href="/">
+        <a
+          href="http://youtube.com/@munna_creation?sub_confirmation=1"
+          target=" blank"
+        >
+          <img
+            src={logo}
+            alt="PokéRealm Logo"
+            width="30"
+            height="30"
+            className="d-inline-block align-top me-2"
+          />
+        </a>
+        <a className="navbar-brand brand-name" href="/">
           PokéRealm
         </a>
         <button
@@ -60,7 +65,7 @@ const Navbar = () => {
           className={`collapse navbar-collapse ${isNavbarOpen ? "show" : ""}`}
           id="navbarTogglerDemo02"
         >
-          <ul className="nav nav-tabs navbar-nav me-auto mb-2 mb-lg-0">
+          <ul className="nav navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <NavLink
                 className="nav-link"

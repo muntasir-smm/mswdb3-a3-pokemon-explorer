@@ -63,7 +63,7 @@ const HomePage = () => {
 
   return (
     <div className="container bg-info-subtle ">
-      <h1 className="my-5 text-center pt-4">Pokémon</h1>
+      <h1 className="py-3 py-lg-5 text-center">Pokémon</h1>
 
       {/* Search Bar */}
       <SearchBar search={search} setSearch={setSearch} />
