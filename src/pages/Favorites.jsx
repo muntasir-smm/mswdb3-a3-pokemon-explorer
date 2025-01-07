@@ -1,4 +1,5 @@
 // src/pages/Favorites.jsx
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../context/FavoritesContext";
@@ -12,7 +13,8 @@ const Favorites = () => {
 
   return (
     <div className="container mt-4">
-      <h1>Favorite Pokémon</h1>
+      <h1 className="text-center m-4 ">My Favorite Pokémon</h1>
+
       <div className="row">
         {favorites.map((pokemon) => (
           <div key={pokemon.id} className="col-md-4 mb-4">
@@ -23,7 +25,7 @@ const Favorites = () => {
                 className="card-img-top"
               />
               <div className="card-body">
-                <h5 className="card-title">{pokemon.name}</h5>
+                <h5 className="card-title text-capitalize">{pokemon.name}</h5>
                 <Link
                   to={`/pokemon/${pokemon.name}`}
                   className="btn btn-primary btn-sm me-2"

@@ -5,6 +5,9 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../context/FavoritesContext";
 
+import SearchBar from "../components/SearchBar";
+import SortAndFilter from "../components/SortAndFilter";
+
 const HomePage = () => {
   const [pokemonList, setPokemonList] = useState([]);
   const [search, setSearch] = useState("");
@@ -62,48 +65,17 @@ const HomePage = () => {
       <h1 className="my-4 text-center">Pokémon</h1>
 
       {/* Search Bar */}
-      <div className="mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Search Pokémon..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+
+      <SearchBar search={search} setSearch={setSearch} />
 
       {/* Sort and Filter */}
-      <div className="mb-3 d-flex gap-3">
-        <div>
-          <h5>Sort by:</h5>
-          <select
-            className="form-select"
-            value={sortOption}
-            onChange={(e) => setSortOption(e.target.value)}
-          >
-            <option value="name">Name</option>
-            <option value="stats">Base Stats</option>
-          </select>
-        </div>
-        <div>
-          <h5>Filter by Type:</h5>
-          <select
-            className="form-select"
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-          >
-            <option value="">All</option>
-            <option value="fire">Fire</option>
-            <option value="water">Water</option>
-            <option value="grass">Grass</option>
-            <option value="electric">Electric</option>
-            <option value="psychic">Psychic</option>
-            <option value="rock">Rock</option>
-            <option value="bug">Bug</option>
-            <option value="ghost">Ghost</option>
-          </select>
-        </div>
-      </div>
+
+      <SortAndFilter
+        sortOption={sortOption}
+        setSortOption={setSortOption}
+        typeFilter={typeFilter}
+        setTypeFilter={setTypeFilter}
+      />
 
       {/* Pokémon List */}
 
