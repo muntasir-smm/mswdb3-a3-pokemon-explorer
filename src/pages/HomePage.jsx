@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { useFavorites } from "../context/FavoritesContext";
 
 import SearchBar from "../components/SearchBar";
 import SortAndFilter from "../components/SortAndFilter";
+import PokemonCard from "../components/PokemonCard"; // Import PokemonCard
 
 const HomePage = () => {
   const [pokemonList, setPokemonList] = useState([]);
@@ -19,7 +19,7 @@ const HomePage = () => {
 
   useEffect(() => {
     axios
-      .get("https://pokeapi.co/api/v2/pokemon?limit=151") // Fetch first 151 Pokémon
+      .get("https://pokeapi.co/api/v2/pokemon?limit=50") // Fetch first 50 Pokémon
       .then((res) => {
         const fetchDetails = res.data.results.map((pokemon) =>
           axios.get(pokemon.url).then((details) => ({
@@ -65,11 +65,9 @@ const HomePage = () => {
       <h1 className="my-4 text-center">Pokémon</h1>
 
       {/* Search Bar */}
-
       <SearchBar search={search} setSearch={setSearch} />
 
       {/* Sort and Filter */}
-
       <SortAndFilter
         sortOption={sortOption}
         setSortOption={setSortOption}
@@ -78,43 +76,16 @@ const HomePage = () => {
       />
 
       {/* Pokémon List */}
-
       {paginatedPokemon.length > 0 ? (
         <div className="row">
           {paginatedPokemon.map((pokemon) => (
-            <div className="col-md-4 mb-4" key={pokemon.id}>
-              <div className="card">
-                <img
-                  src={pokemon.image}
-                  alt={pokemon.name}
-                  className="card-img-top"
-                />
-                <div className="card-body">
-                  <h5 className="card-title text-capitalize">{pokemon.name}</h5>
-                  <Link
-                    to={`/pokemon/${pokemon.name}`}
-                    className="btn btn-primary btn-sm me-2"
-                  >
-                    View Details
-                  </Link>
-                  {isFavorite(pokemon.name) ? (
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => removeFavorite(pokemon.name)}
-                    >
-                      Remove Favorite
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-success btn-sm"
-                      onClick={() => addFavorite(pokemon)}
-                    >
-                      Add to Favorites
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
+            <PokemonCard
+              key={pokemon.id}
+              pokemon={pokemon}
+              isFavorite={isFavorite}
+              addFavorite={addFavorite}
+              removeFavorite={removeFavorite}
+            />
           ))}
         </div>
       ) : (
