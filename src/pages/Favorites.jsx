@@ -33,23 +33,29 @@ const Favorites = () => {
 
   return (
     <div className="container bg-danger-subtle">
-      <h1 className="py-3 py-lg-5 fw-bolder display-3 text-center">
+      <h1 className="text-center fw-bolder display-3 mb-0 p-4">
         Favorite Pokémons
       </h1>
 
-      {/* Search and Sort/Filter */}
-      <div className="mb-3">
-        <SearchBar search={search} setSearch={setSearch} />
-        <SortAndFilter
-          sortOption={sortOption}
-          setSortOption={setSortOption}
-          typeFilter={typeFilter}
-          setTypeFilter={setTypeFilter}
-        />
+      <div className="d-md-flex  flex-row align-items-center  justify-content-between py-3">
+        <div className="w-100">
+          {/* Search Bar */}
+          <SearchBar search={search} setSearch={setSearch} />
+        </div>
+
+        <div className="w-100">
+          {/* Sort and Filter */}
+          <SortAndFilter
+            sortOption={sortOption}
+            setSortOption={setSortOption}
+            typeFilter={typeFilter}
+            setTypeFilter={setTypeFilter}
+          />
+        </div>
       </div>
 
       {/* Display filtered and sorted favorites using PokemonCard */}
-      <div className="row">
+      <div className="row py-5">
         {sortedFavorites.map((pokemon) => (
           <PokemonCard
             key={pokemon.id}
