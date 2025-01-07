@@ -3,10 +3,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useFavorites } from "../context/FavoritesContext";
-
 import SearchBar from "../components/SearchBar";
 import SortAndFilter from "../components/SortAndFilter";
-import PokemonCard from "../components/PokemonCard"; // Import PokemonCard
+import PokemonCard from "../components/PokemonCard";
 
 const HomePage = () => {
   const [pokemonList, setPokemonList] = useState([]);
@@ -41,6 +40,8 @@ const HomePage = () => {
       .catch((error) => console.error("Error fetching Pokémon data:", error));
   }, []);
 
+  // console.log(pokemonList);
+
   const filteredPokemon = pokemonList.filter(
     (pokemon) =>
       pokemon.name.toLowerCase().includes(search.toLowerCase()) &&
@@ -61,8 +62,8 @@ const HomePage = () => {
   const isFavorite = (name) => favorites.some((fav) => fav.name === name);
 
   return (
-    <div className="container">
-      <h1 className="my-4 text-center">Pokémon</h1>
+    <div className="container bg-info-subtle ">
+      <h1 className="my-5 text-center pt-4">Pokémon</h1>
 
       {/* Search Bar */}
       <SearchBar search={search} setSearch={setSearch} />

@@ -1,0 +1,14 @@
+.navbar-nav .nav-item .nav-link.active {
+  background-color: #cc00ff; /* Blue background for active link */
+  color: white !important; /* Ensure the text stays white */
+  border-radius: 0.25rem; /* Rounded corners for a more modern look */
+}
+
+.navbar-nav .nav-item .nav-link {
+  transition: background-color 0.3s ease;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+  background-color: #00eeff; /* Subtle hover effect */
+  color: white; /* Make sure the text stays white when hovered */
+}

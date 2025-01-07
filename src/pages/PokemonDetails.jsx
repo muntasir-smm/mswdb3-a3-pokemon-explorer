@@ -21,7 +21,7 @@ const PokemonDetails = () => {
 
   if (!pokemon) return <p>Loading...</p>;
 
-  const isFavorite = favorites.some((fav) => fav.name === name); // Check if Pokémon is favorited
+  const isFavorite = favorites.some((fav) => fav.name === name);
 
   return (
     <div className="container border border-2 border-info w-50 rounded-5 mt-4 p-4">
