@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
+// Create context for favorites
 const FavoritesContext = createContext();
 
 export const FavoritesProvider = ({ children }) => {
@@ -11,23 +12,42 @@ export const FavoritesProvider = ({ children }) => {
   useEffect(() => {
     const storedFavorites = localStorage.getItem("favorites");
     if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
+      try {
+        const parsedFavorites = JSON.parse(storedFavorites);
+        // Only set the state if the data is valid and not empty
+        if (Array.isArray(parsedFavorites) && parsedFavorites.length > 0) {
+          setFavorites(parsedFavorites);
+        }
+      } catch (error) {
+        console.error("Error parsing favorites from localStorage:", error);
+      }
     }
   }, []);
 
   // Save favorites to localStorage whenever the state changes
   useEffect(() => {
-    localStorage.setItem("favorites", JSON.stringify(favorites));
+    try {
+      // Only store favorites if they exist
+      if (favorites.length > 0) {
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+      }
+    } catch (error) {
+      console.error("Error saving favorites to localStorage:", error);
+    }
   }, [favorites]);
 
   const addFavorite = (pokemon) => {
+    // Avoid duplicates: check if the pokemon already exists
     if (!favorites.some((fav) => fav.name === pokemon.name)) {
-      setFavorites([...favorites, pokemon]);
+      setFavorites((prevFavorites) => [...prevFavorites, pokemon]);
     }
   };
 
   const removeFavorite = (pokemonName) => {
-    setFavorites(favorites.filter((fav) => fav.name !== pokemonName));
+    // Filter out the removed pokemon
+    setFavorites((prevFavorites) =>
+      prevFavorites.filter((fav) => fav.name !== pokemonName)
+    );
   };
 
   return (
