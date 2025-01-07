@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useFavorites } from "../context/FavoritesContext";
+import TypeBadge from "../components/TypeBadge"; // Import the TypeBadge component
 
 const PokemonDetails = () => {
   const { name } = useParams();
@@ -33,50 +34,6 @@ const PokemonDetails = () => {
 
   // Check if the current Pokémon is a favorite
   const isFavorite = favorites.some((fav) => fav.name === name);
-
-  // Helper function for assigning types
-  const getTypeBadgeClass = (typeName) => {
-    switch (typeName) {
-      case "normal":
-        return "bg-secondary";
-      case "fire":
-        return "bg-danger";
-      case "water":
-        return "bg-primary";
-      case "grass":
-        return "bg-success-subtle";
-      case "electric":
-        return "bg-warning";
-      case "ice":
-        return "bg-info-subtle";
-      case "fighting":
-        return "bg-danger-subtle";
-      case "poison":
-        return "bg-secondary";
-      case "ground":
-        return "bg-warning-subtle";
-      case "flying":
-        return "bg-info";
-      case "psychic":
-        return "bg-danger";
-      case "bug":
-        return "bg-dark";
-      case "rock":
-        return "bg-secondary";
-      case "ghost":
-        return "bg-dark-subtle";
-      case "dragon":
-        return "bg-primary";
-      case "dark":
-        return "bg-dark";
-      case "steel":
-        return "bg-secondary-subtle";
-      case "fairy":
-        return "bg-warning-subtle";
-      default:
-        return "bg-secondary";
-    }
-  };
 
   return (
     <div className="container border border-2 border-info w-50 rounded-5 mt-4 p-4">
@@ -134,13 +91,7 @@ const PokemonDetails = () => {
       <div className="d-flex flex-wrap">
         {pokemon.types.map((type, index) => (
           <div key={index} className="m-2">
-            <span
-              className={`badge text-uppercase text-white px-3 py-2 ${getTypeBadgeClass(
-                type.type.name
-              )}`}
-            >
-              {type.type.name}
-            </span>
+            <TypeBadge typeName={type.type.name} />
           </div>
         ))}
       </div>
