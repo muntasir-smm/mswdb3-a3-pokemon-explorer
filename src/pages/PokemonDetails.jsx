@@ -39,7 +39,7 @@ const PokemonDetails = () => {
             className="btn btn-danger"
             onClick={() => removeFavorite(pokemon.name)}
           >
-            Remove Favorite
+            <i className="bi bi-heartbreak"></i>
           </button>
         ) : (
           <button
@@ -51,7 +51,7 @@ const PokemonDetails = () => {
               })
             }
           >
-            Add to Favorites
+            <i className="bi bi-heart"></i>
           </button>
         )}
       </div>

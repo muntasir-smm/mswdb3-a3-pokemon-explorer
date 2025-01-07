@@ -62,9 +62,9 @@ const HomePage = () => {
   const isFavorite = (name) => favorites.some((fav) => fav.name === name);
 
   return (
-    <div className="container bg-info-subtle ">
-      <h1 className="py-3 py-lg-5 text-center fw-bolder display-3">Pokémon</h1>
-      <div className="d-md-flex  flex-row align-items-center  justify-content-between ">
+    <div className="container bg-info-subtle">
+      <h1 className="text-center fw-bolder display-3 mb-0 p-4">Pokémon</h1>
+      <div className="d-md-flex  flex-row align-items-center  justify-content-between py-3">
         <div className="w-100">
           {/* Search Bar */}
           <SearchBar search={search} setSearch={setSearch} />
@@ -80,28 +80,31 @@ const HomePage = () => {
           />
         </div>
       </div>
-      {/* Pokémon List */}
-      {paginatedPokemon.length > 0 ? (
-        <div className="row">
-          {paginatedPokemon.map((pokemon) => (
-            <PokemonCard
-              key={pokemon.id}
-              pokemon={pokemon}
-              isFavorite={isFavorite}
-              addFavorite={addFavorite}
-              removeFavorite={removeFavorite}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center mt-4">
-          <h4>
-            {typeFilter
-              ? `There is no Pokémon of type "${typeFilter}".`
-              : "No Pokémon found."}
-          </h4>
-        </div>
-      )}
+
+      <div className="py-5">
+        {/* Pokémon List */}
+        {paginatedPokemon.length > 0 ? (
+          <div className="row">
+            {paginatedPokemon.map((pokemon) => (
+              <PokemonCard
+                key={pokemon.id}
+                pokemon={pokemon}
+                isFavorite={isFavorite}
+                addFavorite={addFavorite}
+                removeFavorite={removeFavorite}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center mt-4">
+            <h4>
+              {typeFilter
+                ? `There is no Pokémon of type "${typeFilter}".`
+                : "No Pokémon found."}
+            </h4>
+          </div>
+        )}
+      </div>
 
       {/* Pagination */}
       <nav className="mt-4">

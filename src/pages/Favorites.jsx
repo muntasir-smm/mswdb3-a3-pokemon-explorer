@@ -37,21 +37,15 @@ const Favorites = () => {
         Favorite Pokémons
       </h1>
 
-      <div className="d-md-flex  flex-row align-items-center  justify-content-between ">
-        <div className="w-100">
-          {/* Search Bar */}
-          <SearchBar search={search} setSearch={setSearch} />
-        </div>
-
-        <div className="w-100">
-          {/* Sort and Filter */}
-          <SortAndFilter
-            sortOption={sortOption}
-            setSortOption={setSortOption}
-            typeFilter={typeFilter}
-            setTypeFilter={setTypeFilter}
-          />
-        </div>
+      {/* Search and Sort/Filter */}
+      <div className="mb-3">
+        <SearchBar search={search} setSearch={setSearch} />
+        <SortAndFilter
+          sortOption={sortOption}
+          setSortOption={setSortOption}
+          typeFilter={typeFilter}
+          setTypeFilter={setTypeFilter}
+        />
       </div>
 
       {/* Display filtered and sorted favorites using PokemonCard */}
@@ -60,7 +54,7 @@ const Favorites = () => {
           <PokemonCard
             key={pokemon.id}
             pokemon={pokemon}
-            isFavorite={() => true} // Always true coz it's the favorite page
+            isFavorite={() => true}
             addFavorite={addFavorite}
             removeFavorite={removeFavorite}
           />
