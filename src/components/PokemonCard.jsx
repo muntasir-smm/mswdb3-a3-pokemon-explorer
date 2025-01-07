@@ -30,7 +30,7 @@ const PokemonCard = ({ pokemon, isFavorite, addFavorite, removeFavorite }) => {
                 className="btn btn-danger btn-sm"
                 onClick={() => removeFavorite(pokemon.name)}
               >
-                Remove Favorite
+                Remove from Favorite
               </button>
             ) : (
               <button
