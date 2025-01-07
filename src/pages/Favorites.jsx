@@ -1,13 +1,13 @@
 // src/pages/Favorites.jsx
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { useFavorites } from "../context/FavoritesContext";
 import SearchBar from "../components/SearchBar";
 import SortAndFilter from "../components/SortAndFilter";
+import PokemonCard from "../components/PokemonCard";
 
 const Favorites = () => {
-  const { favorites, removeFavorite } = useFavorites();
+  const { favorites, addFavorite, removeFavorite } = useFavorites();
 
   const [search, setSearch] = useState("");
   const [sortOption, setSortOption] = useState("name");
@@ -46,33 +46,16 @@ const Favorites = () => {
         />
       </div>
 
-      {/* Display filtered and sorted favorites */}
+      {/* Display filtered and sorted favorites using PokemonCard */}
       <div className="row">
         {sortedFavorites.map((pokemon) => (
-          <div key={pokemon.id} className="col-md-4 mb-4">
-            <div className="card">
-              <img
-                src={pokemon.image}
-                alt={pokemon.name}
-                className="card-img-top"
-              />
-              <div className="card-body">
-                <h5 className="card-title text-capitalize">{pokemon.name}</h5>
-                <Link
-                  to={`/pokemon/${pokemon.name}`}
-                  className="btn btn-primary btn-sm me-2"
-                >
-                  View Details
-                </Link>
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => removeFavorite(pokemon.name)}
-                >
-                  Remove Favorite
-                </button>
-              </div>
-            </div>
-          </div>
+          <PokemonCard
+            key={pokemon.id}
+            pokemon={pokemon}
+            isFavorite={() => true} // Always true coz it's the favorite page
+            addFavorite={addFavorite}
+            removeFavorite={removeFavorite}
+          />
         ))}
       </div>
     </div>
