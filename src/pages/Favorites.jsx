@@ -15,20 +15,15 @@ const Favorites = () => {
       <h1>Favorite Pokémon</h1>
       <div className="row">
         {favorites.map((pokemon) => (
-          <div key={pokemon.name} className="col-md-4 mb-4">
+          <div key={pokemon.id} className="col-md-4 mb-4">
             <div className="card">
+              <img
+                src={pokemon.image}
+                alt={pokemon.name}
+                className="card-img-top"
+              />
               <div className="card-body">
                 <h5 className="card-title">{pokemon.name}</h5>
-                <img
-                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                    pokemon.url.split("/")[6]
-                  }.png`}
-                  className="card-img-top rounded mx-auto d-block"
-                  alt={pokemon.name}
-                  onError={(e) =>
-                    (e.target.src = "https://via.placeholder.com/150")
-                  } // Fallback image
-                />
                 <Link
                   to={`/pokemon/${pokemon.name}`}
                   className="btn btn-primary btn-sm me-2"

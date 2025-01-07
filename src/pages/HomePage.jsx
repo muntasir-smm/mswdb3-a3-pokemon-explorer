@@ -3,63 +3,65 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { useFavorites } from "../context/FavoritesContext"; // Import the Favorites Context
+import { useFavorites } from "../context/FavoritesContext";
 
 const HomePage = () => {
   const [pokemonList, setPokemonList] = useState([]);
   const [search, setSearch] = useState("");
-  const [sortOption, setSortOption] = useState("name"); // Sorting option
-  const [typeFilter, setTypeFilter] = useState(""); // Type filter, initially set to an empty string
+  const [sortOption, setSortOption] = useState("name");
+  const [typeFilter, setTypeFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(12);
-  const { favorites, addFavorite, removeFavorite } = useFavorites(); // Destructure favorites methods
+  const { favorites, addFavorite, removeFavorite } = useFavorites();
 
   useEffect(() => {
     axios
-      .get("https://pokeapi.co/api/v2/pokemon?limit=50") // Set a reasonable limit
+      .get("https://pokeapi.co/api/v2/pokemon?limit=151") // Fetch first 151 Pokémon
       .then((res) => {
-        setPokemonList(res.data.results);
+        const fetchDetails = res.data.results.map((pokemon) =>
+          axios.get(pokemon.url).then((details) => ({
+            name: details.data.name,
+            id: details.data.id,
+            image: details.data.sprites.front_default,
+            types: details.data.types.map((t) => t.type.name),
+            stats: details.data.stats.reduce(
+              (total, stat) => total + stat.base_stat,
+              0
+            ),
+          }))
+        );
+
+        Promise.all(fetchDetails).then((detailedList) => {
+          setPokemonList(detailedList);
+        });
       })
-      .catch((error) => {
-        console.error("Error fetching Pokémon data:", error);
-      });
+      .catch((error) => console.error("Error fetching Pokémon data:", error));
   }, []);
 
   const filteredPokemon = pokemonList.filter(
     (pokemon) =>
-      pokemon.name && pokemon.name.toLowerCase().includes(search.toLowerCase())
+      pokemon.name.toLowerCase().includes(search.toLowerCase()) &&
+      (typeFilter === "" || pokemon.types.includes(typeFilter.toLowerCase()))
   );
 
-  const sortedPokemon = () => {
-    let sorted = [...filteredPokemon];
-    if (sortOption === "name") {
-      sorted.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sortOption === "stats") {
-      // Assuming `base_stats` is an array with the base stats values
-      sorted.sort((a, b) => a.stats - b.stats);
-    }
-    return sorted;
-  };
+  const sortedPokemon = filteredPokemon.sort((a, b) => {
+    if (sortOption === "name") return a.name.localeCompare(b.name);
+    if (sortOption === "stats") return b.stats - a.stats;
+    return 0;
+  });
 
-  const filteredAndSortedPokemon = () => {
-    let result = sortedPokemon();
-    if (typeFilter && result.length > 0) {
-      result = result.filter((pokemon) =>
-        pokemon.types
-          ? pokemon.types.some((type) => type.type.name === typeFilter)
-          : false
-      );
-    }
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return result.slice(startIndex, endIndex);
-  };
+  const paginatedPokemon = sortedPokemon.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const isFavorite = (name) => favorites.some((fav) => fav.name === name);
 
   return (
     <div className="container">
       <h1 className="my-4 text-center">Pokémon</h1>
+
+      {/* Search Bar */}
       <div className="mb-3">
         <input
           type="text"
@@ -70,107 +72,111 @@ const HomePage = () => {
         />
       </div>
 
+      {/* Sort and Filter */}
       <div className="mb-3 d-flex gap-3">
-        <div className="mb-3 d-flex justify-content-between align-items-center">
-          <h5>Sort by: </h5>
+        <div>
+          <h5>Sort by:</h5>
           <select
-            className="form-select w-auto d-inline-block"
-            onChange={(e) => setSortOption(e.target.value)}
+            className="form-select"
             value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
           >
             <option value="name">Name</option>
             <option value="stats">Base Stats</option>
           </select>
         </div>
-        <div className="mb-3 d-flex justify-content-between">
-          <h5>Filter by:</h5>
+        <div>
+          <h5>Filter by Type:</h5>
           <select
-            className="form-select w-auto d-inline-block"
-            onChange={(e) => setTypeFilter(e.target.value)}
+            className="form-select"
             value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
           >
             <option value="">All</option>
-            <option value="Fire">Fire</option>
-            <option value="Water">Water</option>
-            <option value="Grass">Grass</option>
-            <option value="Electric">Electric</option>
-            <option value="Psychic">Psychic</option>
-            <option value="Rock">Rock</option>
-            <option value="Bug">Bug</option>
-            <option value="Ghost">Ghost</option>
-            {/* Add more Pokémon types as needed */}
+            <option value="fire">Fire</option>
+            <option value="water">Water</option>
+            <option value="grass">Grass</option>
+            <option value="electric">Electric</option>
+            <option value="psychic">Psychic</option>
+            <option value="rock">Rock</option>
+            <option value="bug">Bug</option>
+            <option value="ghost">Ghost</option>
           </select>
         </div>
       </div>
 
-      <div className="row">
-        {filteredAndSortedPokemon().map((pokemon) => (
-          <div className="col-md-4 mb-4" key={pokemon.name}>
-            <div className="card">
-              <img
-                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                  pokemon.url ? pokemon.url.split("/")[6] : ""
-                }.png`}
-                className="card-img-top rounded mx-auto d-block"
-                alt={pokemon.name}
-                onError={(e) =>
-                  (e.target.src = "https://via.placeholder.com/150")
-                } // Fallback image
-              />
-              <div className="card-body">
-                <h5 className="card-title text-capitalize">{pokemon.name}</h5>
-                <Link
-                  to={`/pokemon/${pokemon.name}`}
-                  className="btn btn-primary btn-sm me-2"
-                >
-                  View Details
-                </Link>
-                {isFavorite(pokemon.name) ? (
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => removeFavorite(pokemon.name)}
+      {/* Pokémon List */}
+
+      {paginatedPokemon.length > 0 ? (
+        <div className="row">
+          {paginatedPokemon.map((pokemon) => (
+            <div className="col-md-4 mb-4" key={pokemon.id}>
+              <div className="card">
+                <img
+                  src={pokemon.image}
+                  alt={pokemon.name}
+                  className="card-img-top"
+                />
+                <div className="card-body">
+                  <h5 className="card-title text-capitalize">{pokemon.name}</h5>
+                  <Link
+                    to={`/pokemon/${pokemon.name}`}
+                    className="btn btn-primary btn-sm me-2"
                   >
-                    Remove Favorite
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-success btn-sm"
-                    onClick={() => addFavorite(pokemon)}
-                  >
-                    Add to Favorites
-                  </button>
-                )}
+                    View Details
+                  </Link>
+                  {isFavorite(pokemon.name) ? (
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => removeFavorite(pokemon.name)}
+                    >
+                      Remove Favorite
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-success btn-sm"
+                      onClick={() => addFavorite(pokemon)}
+                    >
+                      Add to Favorites
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center mt-4">
+          <h4>
+            {typeFilter
+              ? `There is no Pokémon of type "${typeFilter}".`
+              : "No Pokémon found."}
+          </h4>
+        </div>
+      )}
 
-      <div className="pagination-container mt-4">
-        {pokemonList.length > itemsPerPage && (
-          <nav>
-            <ul className="pagination">
-              {[
-                ...Array(Math.ceil(pokemonList.length / itemsPerPage)).keys(),
-              ].map((page) => (
-                <li
-                  key={page + 1}
-                  className={`page-item ${
-                    currentPage === page + 1 ? "active" : ""
-                  }`}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => setCurrentPage(page + 1)}
-                  >
-                    {page + 1}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
-      </div>
+      {/* Pagination */}
+      <nav className="mt-4">
+        <ul className="pagination justify-content-center">
+          {[
+            ...Array(Math.ceil(filteredPokemon.length / itemsPerPage)).keys(),
+          ].map((page) => (
+            <li
+              key={page + 1}
+              className={`page-item ${
+                currentPage === page + 1 ? "active" : ""
+              }`}
+            >
+              <button
+                className="page-link"
+                onClick={() => setCurrentPage(page + 1)}
+              >
+                {page + 1}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 };
