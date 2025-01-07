@@ -33,8 +33,8 @@ const Favorites = () => {
 
   return (
     <div className="container bg-danger-subtle">
-      <h1 className="py-3 py-lg-5 fw-bolder text-center">
-        My Favorite Pokémons
+      <h1 className="py-3 py-lg-5 fw-bolder display-3 text-center">
+        Favorite Pokémons
       </h1>
 
       {/* Search and Sort/Filter */}

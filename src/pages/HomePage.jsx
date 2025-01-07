@@ -63,7 +63,7 @@ const HomePage = () => {
 
   return (
     <div className="container bg-info-subtle ">
-      <h1 className="py-3 py-lg-5 text-center">Pokémon</h1>
+      <h1 className="py-3 py-lg-5 text-center fw-bolder display-3">Pokémon</h1>
 
       {/* Search Bar */}
       <SearchBar search={search} setSearch={setSearch} />
@@ -101,7 +101,7 @@ const HomePage = () => {
 
       {/* Pagination */}
       <nav className="mt-4">
-        <ul className="pagination justify-content-center">
+        <ul className="pagination justify-content-center m-0 p-2">
           {[
             ...Array(Math.ceil(filteredPokemon.length / itemsPerPage)).keys(),
           ].map((page) => (
