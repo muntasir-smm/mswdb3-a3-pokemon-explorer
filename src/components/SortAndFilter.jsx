@@ -9,9 +9,9 @@ const SortAndFilter = ({
   setTypeFilter,
 }) => {
   return (
-    <div className="mb-3 d-flex gap-3">
-      <div>
-        <h5>Sort by:</h5>
+    <div className="mb-3 d-flex gap-3 justify-content-end ">
+      <div className="d-flex flex-row align-items-center  justify-content-between">
+        <h5 className="px-3 text-nowrap">Sort by:</h5>
         <select
           className="form-select"
           value={sortOption}
@@ -21,8 +21,8 @@ const SortAndFilter = ({
           <option value="stats">Base Stats</option>
         </select>
       </div>
-      <div>
-        <h5>Filter by Type:</h5>
+      <div className="d-flex flex-row align-items-center  justify-content-between ">
+        <h5 className="px-3 text-nowrap">Filter Type:</h5>
         <select
           className="form-select"
           value={typeFilter}

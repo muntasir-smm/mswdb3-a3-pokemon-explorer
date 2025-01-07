@@ -68,19 +68,20 @@ const Navbar = () => {
           <ul className="nav navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <NavLink
-                className="nav-link"
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
                 to="/"
-                activeClassName="active"
-                exact
               >
                 Home
               </NavLink>
             </li>
             <li className="nav-item">
               <NavLink
-                className="nav-link"
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
                 to="/favorites"
-                activeClassName="active"
               >
                 Favorites
               </NavLink>

@@ -64,18 +64,22 @@ const HomePage = () => {
   return (
     <div className="container bg-info-subtle ">
       <h1 className="py-3 py-lg-5 text-center fw-bolder display-3">Pokémon</h1>
+      <div className="d-md-flex  flex-row align-items-center  justify-content-between ">
+        <div className="w-100">
+          {/* Search Bar */}
+          <SearchBar search={search} setSearch={setSearch} />
+        </div>
 
-      {/* Search Bar */}
-      <SearchBar search={search} setSearch={setSearch} />
-
-      {/* Sort and Filter */}
-      <SortAndFilter
-        sortOption={sortOption}
-        setSortOption={setSortOption}
-        typeFilter={typeFilter}
-        setTypeFilter={setTypeFilter}
-      />
-
+        <div className="w-100">
+          {/* Sort and Filter */}
+          <SortAndFilter
+            sortOption={sortOption}
+            setSortOption={setSortOption}
+            typeFilter={typeFilter}
+            setTypeFilter={setTypeFilter}
+          />
+        </div>
+      </div>
       {/* Pokémon List */}
       {paginatedPokemon.length > 0 ? (
         <div className="row">
