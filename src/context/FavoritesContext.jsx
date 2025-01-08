@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-// Create context for favorites
 const FavoritesContext = createContext();
 
 export const FavoritesProvider = ({ children }) => {
@@ -14,7 +13,6 @@ export const FavoritesProvider = ({ children }) => {
     if (storedFavorites) {
       try {
         const parsedFavorites = JSON.parse(storedFavorites);
-        // Only set the state if the data is valid and not empty
         if (Array.isArray(parsedFavorites) && parsedFavorites.length > 0) {
           setFavorites(parsedFavorites);
         }
@@ -24,7 +22,7 @@ export const FavoritesProvider = ({ children }) => {
     }
   }, []);
 
-  // Save favorites to localStorage whenever the state changes
+  // Save favorites to localStorage
   useEffect(() => {
     try {
       // Only store favorites if they exist
@@ -37,7 +35,7 @@ export const FavoritesProvider = ({ children }) => {
   }, [favorites]);
 
   const addFavorite = (pokemon) => {
-    // Avoid duplicates: check if the pokemon already exists
+    // Avoid duplicates
     if (!favorites.some((fav) => fav.name === pokemon.name)) {
       setFavorites((prevFavorites) => [...prevFavorites, pokemon]);
     }

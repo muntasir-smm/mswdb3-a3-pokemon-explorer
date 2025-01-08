@@ -8,7 +8,7 @@ const Pagination = ({
   setCurrentPage,
 }) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const maxVisiblePages = 5; // Number of visible pages around current page
+  const maxVisiblePages = 5;
   const pages = [];
 
   // Always include the first page

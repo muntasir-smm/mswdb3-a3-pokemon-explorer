@@ -4,7 +4,7 @@ import React from "react";
 
 const SearchBar = ({ search, setSearch }) => {
   return (
-    <div className="">
+    <div className="py-4">
       <input
         type="text"
         className="form-control"

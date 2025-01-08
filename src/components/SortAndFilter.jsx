@@ -9,7 +9,7 @@ const SortAndFilter = ({
   setTypeFilter,
 }) => {
   return (
-    <div className="d-flex gap-3 justify-content-end ">
+    <div className="d-flex gap-3 justify-content-end py-4">
       <div className="d-flex flex-row align-items-center  justify-content-between">
         <h5 className="px-3 text-nowrap">Sort by:</h5>
         <select

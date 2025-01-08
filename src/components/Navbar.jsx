@@ -36,7 +36,7 @@ const Navbar = () => {
       <div className="container-fluid">
         <a
           href="http://youtube.com/@munna_creation?sub_confirmation=1"
-          target=" blank"
+          target=" _blank"
         >
           <img
             src={logo}

@@ -28,7 +28,9 @@ const Footer = () => {
               Terms of Service
             </a>
           </li>
-          <li>Made by Muntasir Munna</li>
+          <li>
+            <em>Made by Muntasir Munna</em>
+          </li>
         </ul>
       </div>
     </footer>

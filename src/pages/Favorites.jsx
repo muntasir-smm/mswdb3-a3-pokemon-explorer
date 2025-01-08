@@ -66,15 +66,16 @@ const Favorites = () => {
       </div>
 
       {/* Display filtered and sorted favorites using PokemonCard */}
-      <div className="row py-5">
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 mb-4">
         {currentItems.map((pokemon) => (
-          <PokemonCard
-            key={pokemon.id}
-            pokemon={pokemon}
-            isFavorite={() => true}
-            addFavorite={addFavorite}
-            removeFavorite={removeFavorite}
-          />
+          <div key={pokemon.name} className="mb-4 ">
+            <PokemonCard
+              pokemon={pokemon}
+              isFavorite={() => true}
+              addFavorite={addFavorite}
+              removeFavorite={removeFavorite}
+            />
+          </div>
         ))}
       </div>
 

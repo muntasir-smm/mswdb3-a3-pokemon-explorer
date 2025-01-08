@@ -21,7 +21,7 @@ const HomePage = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("https://pokeapi.co/api/v2/pokemon?limit=50") // Fetch first 50 Pokémon
+      .get("https://pokeapi.co/api/v2/pokemon?limit=50") // Fetch 50 Pokémon
       .then((res) => {
         const fetchDetails = res.data.results.map((pokemon) =>
           axios.get(pokemon.url).then((details) => ({
@@ -99,16 +99,18 @@ const HomePage = () => {
             </div>
           </div>
         ) : paginatedPokemon.length > 0 ? (
-          <div className="row">
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 mb-4">
             {/* Pokémon Card List */}
             {paginatedPokemon.map((pokemon) => (
-              <PokemonCard
-                key={pokemon.id}
-                pokemon={pokemon}
-                isFavorite={isFavorite}
-                addFavorite={addFavorite}
-                removeFavorite={removeFavorite}
-              />
+              <div key={pokemon.id} className="mb-4 ">
+                <PokemonCard
+                  key={pokemon.id}
+                  pokemon={pokemon}
+                  isFavorite={isFavorite}
+                  addFavorite={addFavorite}
+                  removeFavorite={removeFavorite}
+                />
+              </div>
             ))}
           </div>
         ) : (

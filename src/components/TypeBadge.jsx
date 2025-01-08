@@ -11,17 +11,17 @@ const TypeBadge = ({ typeName }) => {
       case "water":
         return "bg-primary";
       case "grass":
-        return "bg-success-subtle";
+        return "bg-success";
       case "electric":
-        return "bg-warning";
+        return "bg-warning text-info-emphasis";
       case "ice":
         return "bg-info-subtle";
       case "fighting":
         return "bg-danger-subtle";
       case "poison":
-        return "bg-secondary";
+        return "bg-secondary text-warning";
       case "ground":
-        return "bg-warning-subtle";
+        return "bg-warning-subtle text-success";
       case "flying":
         return "bg-info";
       case "psychic":
@@ -39,7 +39,7 @@ const TypeBadge = ({ typeName }) => {
       case "steel":
         return "bg-secondary-subtle";
       case "fairy":
-        return "bg-warning-subtle";
+        return "bg-warning-subtle text-danger";
       default:
         return "bg-secondary";
     }
@@ -47,7 +47,7 @@ const TypeBadge = ({ typeName }) => {
 
   return (
     <span
-      className={`badge text-uppercase text-white px-3 py-2 ${getTypeBadgeClass(
+      className={`badge text-uppercase px-3 py-2 ${getTypeBadgeClass(
         typeName
       )}`}
     >
