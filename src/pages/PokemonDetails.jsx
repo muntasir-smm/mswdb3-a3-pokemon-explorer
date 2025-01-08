@@ -25,8 +25,11 @@ const PokemonDetails = () => {
   // Loading state
   if (!pokemon && !error)
     return (
-      <div className="spinner-border text-primary text-center" role="status">
-        Loading Pokémon details...
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="text-center">
+          <div className="spinner-border text-primary mb-3" role="status"></div>
+          <p className="text-primary">Loading Pokémon details...</p>
+        </div>
       </div>
     );
 

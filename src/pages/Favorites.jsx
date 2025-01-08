@@ -5,6 +5,7 @@ import { useFavorites } from "../context/FavoritesContext";
 import SearchBar from "../components/SearchBar";
 import SortAndFilter from "../components/SortAndFilter";
 import PokemonCard from "../components/PokemonCard";
+import Pagination from "../components/Pagination";
 
 const Favorites = () => {
   const { favorites, addFavorite, removeFavorite } = useFavorites();
@@ -12,6 +13,8 @@ const Favorites = () => {
   const [search, setSearch] = useState("");
   const [sortOption, setSortOption] = useState("name");
   const [typeFilter, setTypeFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Filter favorites based on the search input
   const filteredFavorites = favorites.filter(
@@ -26,6 +29,14 @@ const Favorites = () => {
     if (sortOption === "stats") return b.stats - a.stats;
     return 0;
   });
+
+  // Pagination logic
+  const totalItems = sortedFavorites.length;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = sortedFavorites.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   if (favorites.length === 0) {
     return <p className="text-center mt-5">No favorites added yet!</p>;
@@ -56,7 +67,7 @@ const Favorites = () => {
 
       {/* Display filtered and sorted favorites using PokemonCard */}
       <div className="row py-5">
-        {sortedFavorites.map((pokemon) => (
+        {currentItems.map((pokemon) => (
           <PokemonCard
             key={pokemon.id}
             pokemon={pokemon}
@@ -66,6 +77,14 @@ const Favorites = () => {
           />
         ))}
       </div>
+
+      {/* Pagination */}
+      <Pagination
+        totalItems={totalItems}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
     </div>
   );
 };

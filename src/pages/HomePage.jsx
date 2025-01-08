@@ -6,6 +6,7 @@ import { useFavorites } from "../context/FavoritesContext";
 import SearchBar from "../components/SearchBar";
 import SortAndFilter from "../components/SortAndFilter";
 import PokemonCard from "../components/PokemonCard";
+import Pagination from "../components/Pagination";
 
 const HomePage = () => {
   const [pokemonList, setPokemonList] = useState([]);
@@ -15,8 +16,10 @@ const HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(12);
   const { favorites, addFavorite, removeFavorite } = useFavorites();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get("https://pokeapi.co/api/v2/pokemon?limit=50") // Fetch first 50 Pokémon
       .then((res) => {
@@ -35,12 +38,14 @@ const HomePage = () => {
 
         Promise.all(fetchDetails).then((detailedList) => {
           setPokemonList(detailedList);
+          setLoading(false);
         });
       })
-      .catch((error) => console.error("Error fetching Pokémon data:", error));
+      .catch((error) => {
+        console.error("Error fetching Pokémon data:", error);
+        setLoading(false);
+      });
   }, []);
-
-  // console.log(pokemonList);
 
   const filteredPokemon = pokemonList.filter(
     (pokemon) =>
@@ -64,7 +69,7 @@ const HomePage = () => {
   return (
     <div className="container bg-info-subtle">
       <h1 className="text-center fw-bolder display-3 mb-0 p-4">Pokémon</h1>
-      <div className="d-md-flex  flex-row align-items-center  justify-content-between py-3">
+      <div className="d-md-flex flex-row align-items-center justify-content-between py-3">
         <div className="w-100">
           {/* Search Bar */}
           <SearchBar search={search} setSearch={setSearch} />
@@ -82,9 +87,20 @@ const HomePage = () => {
       </div>
 
       <div className="py-5">
-        {/* Pokémon List */}
-        {paginatedPokemon.length > 0 ? (
+        {/* Loading Spinner */}
+        {loading ? (
+          <div className="d-flex justify-content-center align-items-center vh-100">
+            <div className="text-center">
+              <div
+                className="spinner-border text-primary mb-3"
+                role="status"
+              ></div>
+              <p className="text-primary">Loading Pokémon...</p>
+            </div>
+          </div>
+        ) : paginatedPokemon.length > 0 ? (
           <div className="row">
+            {/* Pokémon Card List */}
             {paginatedPokemon.map((pokemon) => (
               <PokemonCard
                 key={pokemon.id}
@@ -100,34 +116,21 @@ const HomePage = () => {
             <h4>
               {typeFilter
                 ? `There is no Pokémon of type "${typeFilter}".`
-                : "No Pokémon found."}
+                : "No Pokémon found matching your search criteria."}
             </h4>
           </div>
         )}
       </div>
 
       {/* Pagination */}
-      <nav className="mt-4">
-        <ul className="pagination justify-content-center m-0 p-2">
-          {[
-            ...Array(Math.ceil(filteredPokemon.length / itemsPerPage)).keys(),
-          ].map((page) => (
-            <li
-              key={page + 1}
-              className={`page-item ${
-                currentPage === page + 1 ? "active" : ""
-              }`}
-            >
-              <button
-                className="page-link"
-                onClick={() => setCurrentPage(page + 1)}
-              >
-                {page + 1}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {!loading && paginatedPokemon.length > 0 && (
+        <Pagination
+          totalItems={filteredPokemon.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
     </div>
   );
 };
